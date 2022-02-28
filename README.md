@@ -19,7 +19,7 @@ A specific version of the `bob` CLI can be installed:
 
 ```yaml
 steps:
-- uses: hashicorp/action-setup-bob
+- uses: hashicorp/action-setup-bob@v1
   with:
     github-token:
       ${{ secrets.GITHUB_TOKEN }}

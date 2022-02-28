@@ -1,0 +1,13 @@
+name: setup-bob
+description: Setup GitHub CLI, bob, on GitHub Actions runners
+inputs:
+  github-token:
+    description: "GitHub token to access the bob release."
+    required: true
+  version:
+    description: Version of bob CLI to install
+    required: false
+    default: '0.0.19'
+runs:
+  using: node16
+  main: dist/index.js
