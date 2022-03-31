@@ -1,6 +1,6 @@
 {
   "name": "action-setup-bob",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Setup bob CLI for GitHub Actions",
   "main": "action.js",
   "scripts": {
