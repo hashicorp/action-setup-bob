@@ -35,7 +35,7 @@ The actions supports the following inputs:
 
 ## Release Instructions
 
-If you have released a new version of [bob](https://github.com/hashicorp/bob), you will need to update the bob version here to ensure it points to the correct version. An example of this update should look like [this](https://github.com/hashicorp/action-setup-bob/pull/4/files) Once the bob version has been updated, you will need to create a new tag and point it to the major version. 
+If you have released a new version of [bob](https://github.com/hashicorp/bob), you will need to update the bob version here to ensure it points to the correct version. An example of this update should look like [this](https://github.com/hashicorp/action-setup-bob/pull/4/files) Once the bob version has been updated, you will need to create a new tag and point it to the major version tag. 
 
 **Updating `bob` Version** 
 1. Checkout to a new branch
