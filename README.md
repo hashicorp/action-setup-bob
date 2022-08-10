@@ -3,6 +3,26 @@ GitHub action to setup `bob` CLI. This action can be run on `ubuntu-latest` and 
 
 The pattern for this action copied from `https://github.com/hashicorp/setup-hc-releases` as it has reliable tests and error handling patterns.
 
+## Important Note
+
+If you have released a new version of [bob](https://github.com/hashicorp/bob), you will need to update the bob version here to ensure it points to the correct version. An example of this update should look like [this](https://github.com/hashicorp/action-setup-bob/pull/4/files)
+
+Step by Step Process: 
+
+**Updating `bob` Version** 
+1. Checkout to a new branch
+2. Update bob version
+3. Run `npm prepare` (you might have to do a `npm install` to wake up npm if you haven't used it in a while)
+4. Push your changes, open up a PR, get it approved + merged.
+
+**Create a New Tag**
+1. `git checkout main && git pull origin main`
+2. `git tag v<new-version-number> && git push origin v<new-version-number>`
+3. Push the tag while you're on the `main` branch
+4. Depending on which major version the action is on, you will need to delete and update the tag version: 
+  - `git tag -d v1 && git push origin :refs/tags/v1`
+  - `git tag v1 && git push origin v1` (or whatever main version the action is on)
+
 ## Usage
 
 Setup the `bob` CLI:
