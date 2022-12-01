@@ -5,7 +5,7 @@ const githubRelease = require('./github-release');
 const executableName = 'bob';
 const gitHubRepositoryOwner = 'hashicorp';
 const gitHubRepositoryRepo = 'bob';
-const latestVersion = '0.0.41';
+const latestVersion = '0.0.42';
 
 async function downloadReleaseAsset(client, releaseAsset, directory) {
   return await githubRelease.downloadAsset(client, gitHubRepositoryOwner, gitHubRepositoryRepo, releaseAsset, directory);
@@ -17,8 +17,8 @@ async function extractReleaseAsset(client, downloadPath) {
   try {
     return await tc.extractZip(downloadPath);
   } catch (err) {
-      client.log.error(`Unable to extract release asset (${downloadPath}): ${err}`);
-      throw err;
+    client.log.error(`Unable to extract release asset (${downloadPath}): ${err}`);
+    throw err;
   }
 }
 
