@@ -40,7 +40,7 @@ If you have released a new version of [bob](https://github.com/hashicorp/bob), y
 **Updating `bob` Version** 
 1. Checkout to a new branch
 2. Update bob version
-3. Run `npm prepare` (you might have to do a `npm install` to wake up npm if you haven't used it in a while)
+3. Run `npm run prepare` (you might have to do a `npm install` to wake up npm if you haven't used it in a while)
 4. Push your changes, open up a PR, get it approved + merged.
 
 **Create a New Tag**
