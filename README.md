@@ -24,14 +24,14 @@ steps:
     github-token:
       ${{ secrets.GITHUB_TOKEN }}
     version:
-      0.0.19
+      0.1.0
 ```
 
 ## Inputs
 The actions supports the following inputs:
 
 - `github-token`: The GitHub token secret to use with permissions to download `bob` CLI
-- `version`: The version of `bob` to install, defaulting to `0.0.19`
+- `version`: The version of `bob` to install, defaulting to latest
 
 ## Release Instructions
 

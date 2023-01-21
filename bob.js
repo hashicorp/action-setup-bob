@@ -10,7 +10,7 @@ const githubRelease = require('./github-release');
 const executableName = 'bob';
 const gitHubRepositoryOwner = 'hashicorp';
 const gitHubRepositoryRepo = 'bob';
-const latestVersion = '0.0.44';
+const latestVersion = '0.1.0';
 
 async function downloadReleaseAsset(client, releaseAsset, directory) {
   return await githubRelease.downloadAsset(client, gitHubRepositoryOwner, gitHubRepositoryRepo, releaseAsset, directory);
