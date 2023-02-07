@@ -79,7 +79,7 @@ const githubRelease = __nccwpck_require__(3098);
 const executableName = 'bob';
 const gitHubRepositoryOwner = 'hashicorp';
 const gitHubRepositoryRepo = 'bob';
-const latestVersion = '0.1.1';
+const latestVersion = '0.1.2';
 
 async function downloadReleaseAsset(client, releaseAsset, directory) {
   return await githubRelease.downloadAsset(client, gitHubRepositoryOwner, gitHubRepositoryRepo, releaseAsset, directory);
