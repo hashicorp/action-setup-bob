@@ -10,7 +10,7 @@ inputs:
   version:
     description: Version of bob CLI to install
     required: false
-    default: '0.1.4'
+    default: '0.1.5'
 runs:
   using: node16
   main: dist/index.js
