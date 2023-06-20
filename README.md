@@ -1,4 +1,9 @@
-# action-setup-bob
+# action-setup-bob [![Heimdall](https://heimdall.hashicorp.services/api/v1/assets/action-setup-bob/badge.svg?key=53a349ec7ff1ff896dfb0889f8410527df8156e287294445dcc504e1c55e88bb)](https://heimdall.hashicorp.services/site/assets/action-setup-bob) [![CI](https://github.com/hashicorp/action-setup-bob/actions/workflows/ci.yml/badge.svg)](https://github.com/hashicorp/action-setup-bob/actions/workflows/ci.yml)
+
+_For internal HashiCorp use only. The output of this action is specifically
+designed to satisfy the needs of our internal deployment system, and may not be
+useful to other organizations._
+
 GitHub action to setup `bob` CLI. This action can be run on `ubuntu-latest` and `macos-latest` GitHub Actions runners, and will install and expose a specified version of the `bob` CLI on the runner environment.
 
 The pattern for this action copied from `https://github.com/hashicorp/setup-hc-releases` as it has reliable tests and error handling patterns.

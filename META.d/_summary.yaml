@@ -1,0 +1,8 @@
+---
+schema: 1.1
+category: gha
+summary:
+  owner: team-rel-eng
+  description: |
+    GitHub action to install bob CLI
+  visibility: public

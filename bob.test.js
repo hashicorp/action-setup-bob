@@ -27,7 +27,7 @@ describe('download release asset', () => {
   test('downloads successfully', async () => {
     const releaseAsset = {
       id: 1,
-      name: "bob_0.0.19_linux_amd64.zip",
+      name: "bob_1.0.16_linux_amd64.zip",
     };
 
     fs.mkdtemp(path.join(os.tmpdir(), 'setup-bob-'), async (err, directory) => {
@@ -54,7 +54,7 @@ describe('download release asset', () => {
   test('throws error', async () => {
     const releaseAsset = {
       id: 1,
-      name: "bob_0.0.19_linux_amd64.zip",
+      name: "bob_1.0.16_linux_amd64.zip",
     };
     fs.mkdtemp(path.join(os.tmpdir(), 'setup-bob-'), async (err, directory) => {
       if (err) throw err;
@@ -99,22 +99,22 @@ describe('get release asset', () => {
       assets: [
         {
           id: 1,
-          name: "bob_0.0.19_darwin_amd64.zip"
+          name: "bob_1.0.16_darwin_amd64.zip"
         },
         {
           id: 2,
-          name: "bob_0.0.19_linux_amd64.zip"
+          name: "bob_1.0.16_linux_amd64.zip"
         },
       ],
       id: "1",
-      name: "v0.0.19",
+      name: "v1.0.16",
     };
 
     nock('https://api.github.com')
-      .get(`/repos/hashicorp/bob/releases/tags/v0.0.19`)
+      .get(`/repos/hashicorp/bob/releases/tags/v1.0.16`)
       .reply(200, mockRelease);
 
-    const releaseAsset = await bob.getReleaseAsset(client, '0.0.19', goOperatingSystem, goArchitecture);
+    const releaseAsset = await bob.getReleaseAsset(client, '1.0.16', goOperatingSystem, goArchitecture);
 
     await expect(releaseAsset).toEqual(mockRelease.assets.find((asset) => asset.name.includes(goOperatingSystem) && asset.name.includes(goArchitecture)));
   })
@@ -124,30 +124,30 @@ describe('get release asset', () => {
       assets: [
         {
           id: 1,
-          name: "bob_0.0.19_darwin_amd64.zip"
+          name: "bob_1.0.16_darwin_amd64.zip"
         },
         {
           id: 2,
-          name: "bob_0.0.19_linux_amd64.zip"
+          name: "bob_1.0.16_linux_amd64.zip"
         },
       ],
       id: "1",
-      name: "v0.0.19",
+      name: "v1.0.16",
     };
 
     nock('https://api.github.com')
-      .get(`/repos/hashicorp/bob/releases/tags/v0.0.19`)
+      .get(`/repos/hashicorp/bob/releases/tags/v1.0.16`)
       .reply(200, mockRelease);
 
-    await expect(bob.getReleaseAsset(client, '0.0.19', 'darwin', '386')).rejects.toThrow('Release asset not found in release');
+    await expect(bob.getReleaseAsset(client, '1.0.16', 'darwin', '386')).rejects.toThrow('Release asset not found in release');
   });
 
   test('throws release not found error', async () => {
     nock('https://api.github.com')
-      .get(`/repos/hashicorp/bob/releases/tags/v0.0.19`)
+      .get(`/repos/hashicorp/bob/releases/tags/v1.0.16`)
       .reply(404, 'Not Found');
 
-    await expect(bob.getReleaseAsset(client, '0.0.19', 'linux', 'amd64')).rejects.toThrow('Not Found');
+    await expect(bob.getReleaseAsset(client, '1.0.16', 'linux', 'amd64')).rejects.toThrow('Not Found');
   });
 });
 
@@ -155,14 +155,14 @@ describe('version', () => {
   test('stdout', async () => {
     const spy = jest.spyOn(exec, 'exec');
     spy.mockImplementation((commandLine, args, options) => {
-      options.listeners.stdout('bob v0.0.19 ()');
+      options.listeners.stdout('bob v1.0.16 ()');
       Promise.resolve();
     });
 
     const result = await bob.version();
 
     await expect(spy).toHaveBeenCalled();
-    await expect(result).toEqual({ stderr: '', stdout: 'bob v0.0.19 ()' });
+    await expect(result).toEqual({ stderr: '', stdout: 'bob v1.0.16 ()' });
   });
 
   test('stderr', async () => {
