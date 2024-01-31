@@ -21,13 +21,13 @@ function mapArch(arch) {
     x64: 'amd64'
   };
   return mappings[arch] || arch;
-}  
+}
 
 async function run() {
   try {
     const githubToken = core.getInput('github-token', { required: true });
     const configuredVersion = core.getInput('version');
-    
+
     const client = await octokit(githubToken);
     const architecture = mapArch(os.arch());
     const platform = os.platform();
@@ -79,7 +79,7 @@ const githubRelease = __nccwpck_require__(3098);
 const executableName = 'bob';
 const gitHubRepositoryOwner = 'hashicorp';
 const gitHubRepositoryRepo = 'bob';
-const latestVersion = '0.1.13';
+const latestVersion = '0.2.0';
 
 async function downloadReleaseAsset(client, releaseAsset, directory) {
   return await githubRelease.downloadAsset(client, gitHubRepositoryOwner, gitHubRepositoryRepo, releaseAsset, directory);
@@ -174,14 +174,14 @@ async function downloadAsset(client, owner, repo, releaseAsset, directory) {
     try {
         const downloadPath = path.resolve(directory, releaseAsset.name);
         const file = fs.createWriteStream(downloadPath);
-        
+
         // Workaround since oktokit asset downloads are broken https://github.com/octokit/core.js/issues/415
         const githubToken = core.getInput('github-token');
 
         if (typeof releaseAsset.url === "undefined") { // template url for tests
             releaseAsset.url = `https://api.github.com/repos/${owner}/${repo}/releases/assets/${releaseAsset.id}`;
         }
-        
+
         const response = await got(releaseAsset.url, {
                 method: 'GET',
                 headers: {
@@ -784,8 +784,8 @@ class OidcClient {
             const res = yield httpclient
                 .getJson(id_token_url)
                 .catch(error => {
-                throw new Error(`Failed to get ID Token. \n 
-        Error Code : ${error.statusCode}\n 
+                throw new Error(`Failed to get ID Token. \n
+        Error Code : ${error.statusCode}\n
         Error Message: ${error.result.message}`);
             });
             const id_token = (_a = res.result) === null || _a === void 0 ? void 0 : _a.value;
@@ -14588,7 +14588,7 @@ const understoodStatuses = new Set([
 const errorStatusCodes = new Set([
     500,
     502,
-    503, 
+    503,
     504,
 ]);
 
@@ -16877,7 +16877,7 @@ exports.parse = function (s) {
       if(/^:base64:/.test(value))
         return Buffer.from(value.substring(8), 'base64')
       else
-        return /^:/.test(value) ? value.substring(1) : value 
+        return /^:/.test(value) ? value.substring(1) : value
     }
     return value
   })
@@ -24208,7 +24208,7 @@ module.exports = JSON.parse('[[[0,44],"disallowed_STD3_valid"],[[45,46],"valid"]
 /************************************************************************/
 /******/ 	// The module cache
 /******/ 	var __webpack_module_cache__ = {};
-/******/ 	
+/******/
 /******/ 	// The require function
 /******/ 	function __nccwpck_require__(moduleId) {
 /******/ 		// Check if module is in cache
@@ -24222,7 +24222,7 @@ module.exports = JSON.parse('[[[0,44],"disallowed_STD3_valid"],[[45,46],"valid"]
 /******/ 			// no module.loaded needed
 /******/ 			exports: {}
 /******/ 		};
-/******/ 	
+/******/
 /******/ 		// Execute the module function
 /******/ 		var threw = true;
 /******/ 		try {
@@ -24231,16 +24231,16 @@ module.exports = JSON.parse('[[[0,44],"disallowed_STD3_valid"],[[45,46],"valid"]
 /******/ 		} finally {
 /******/ 			if(threw) delete __webpack_module_cache__[moduleId];
 /******/ 		}
-/******/ 	
+/******/
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-/******/ 	
+/******/
 /************************************************************************/
 /******/ 	/* webpack/runtime/compat */
-/******/ 	
+/******/
 /******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
-/******/ 	
+/******/
 /************************************************************************/
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
