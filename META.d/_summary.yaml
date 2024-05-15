@@ -1,8 +1,9 @@
 ---
 schema: 1.1
-category: gha
+partition: release-engineering
+category: github-action
 summary:
-  owner: team-rel-eng
+  owner: team-selfmanaged-releng
   description: |
     GitHub action to install bob CLI
   visibility: public
