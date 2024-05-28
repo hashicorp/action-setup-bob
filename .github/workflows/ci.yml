@@ -27,7 +27,7 @@ jobs:
     - name: "Install tools (only for running locally via act)"
       if: env.CI == 'true' && env.ACT == 'true'
       env:
-        GH_TOKEN: ${{ github.token || secrets.GITHUB_TOKEN }}
+        GH_TOKEN: ${{ secrets.ELEVATED_GITHUB_TOKEN }}
       run: |
         run_quiet() { local logfile="${RUNNER_TEMP}/command.log" ; "$@" > "$logfile" 2>&1 || { cat "$logfile" ; exit 1 ; } ; }
 
@@ -45,11 +45,11 @@ jobs:
       id: install
       with:
         tag: ${{ matrix.tag }}
-        github-token: ${{ github.token || secrets.GITHUB_TOKEN }}
+        github-token: ${{ secrets.ELEVATED_GITHUB_TOKEN }}
 
     - name: Test reported version
       env:
-        GH_TOKEN: ${{ github.token || secrets.GITHUB_TOKEN }}
+        GH_TOKEN: ${{ secrets.ELEVATED_GITHUB_TOKEN }}
       run: |
         got_ver="${{ steps.install.outputs.installed_version }}"
         if [ -z "$got_ver" ]; then
@@ -84,4 +84,4 @@ jobs:
       uses: ./
       with:
         tag: ${{ matrix.tag }}
-        github-token: ${{ github.token || secrets.GITHUB_TOKEN }}
+        github-token: ${{ secrets.ELEVATED_GITHUB_TOKEN }}
