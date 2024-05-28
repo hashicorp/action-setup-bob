@@ -7,10 +7,30 @@ inputs:
   github-token:
     description: "GitHub token to access the bob release."
     required: true
-  version:
-    description: Version of bob CLI to install
+  tag:
+    description: "Release tag of bob CLI to install; install the latest release by default"
     required: false
-    default: '0.2.2'
+    # empty for the latest release
+    default: ''
+outputs:
+  installed_version:
+    description: "The installed version as reported by the tool"
+    value: ${{ steps.capture.outputs.installed_version }}
+
 runs:
-  using: node20
-  main: dist/index.js
+  using: composite
+  steps:
+    - name: Fetch release artifact
+      uses: jaxxstorm/action-install-gh-release@v1.12.0
+      with:
+        repo: hashicorp/bob
+        tag: ${{ inputs.tag }}
+        token: ${{ inputs.github-token }}
+        cache: false
+
+    - name: Capture installed version
+      id: capture
+      shell: bash
+      run: |
+        bob -version | tee .version_check
+        echo "installed_version=$(< .version_check)" >> "$GITHUB_OUTPUT"
