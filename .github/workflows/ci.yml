@@ -40,12 +40,33 @@ jobs:
         run_quiet apt install --yes gh
         gh --version
 
+    # Create a marker we can use later to verify no files were added to the working directory.
+    # Extra files make goreleaser anxious.
+    - name: Create Marker File
+      env:
+        CRUFT_MARKER: "${{ runner.temp }}/pre-install-marker"
+      run: touch "${CRUFT_MARKER}"
+
     - name: Install bob
       uses: ./
       id: install
       with:
         tag: ${{ matrix.tag }}
         github-token: ${{ secrets.ELEVATED_GITHUB_TOKEN }}
+
+    # Find anything in the working directory newer than the marker created above
+    - name: Check For New Files
+      env:
+        CRUFT_LOG: "${{ runner.temp }}/bob-installer-cruft.txt"
+        CRUFT_MARKER: "${{ runner.temp }}/pre-install-marker"
+      run: |
+        find "$PWD" -newer "${CRUFT_MARKER}" > "${CRUFT_LOG}"
+        if [ "$(wc -l < "${{ env.CRUFT_LOG }}" | xargs)" -gt 0 ]; then
+          echo "::error::Unexpected changes to working directory (tree):"
+          cat "${CRUFT_LOG}"
+          exit 1
+        fi
+        echo "No unexpected files found."
 
     - name: Test reported version
       env:

@@ -32,5 +32,4 @@ runs:
       id: capture
       shell: bash
       run: |
-        bob -version | tee .version_check
-        echo "installed_version=$(< .version_check)" >> "$GITHUB_OUTPUT"
+        echo "installed_version=$(bob -version)" | tee -a "$GITHUB_OUTPUT"
