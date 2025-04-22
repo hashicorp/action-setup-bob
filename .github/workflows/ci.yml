@@ -22,7 +22,7 @@ jobs:
           - 'v0.2.0' # not the latest release
 
     steps:
-    - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
     - name: "Install tools (only for running locally via act)"
       if: env.CI == 'true' && env.ACT == 'true'
