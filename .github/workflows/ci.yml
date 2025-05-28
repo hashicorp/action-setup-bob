@@ -27,7 +27,7 @@ jobs:
     - name: "Install tools (only for running locally via act)"
       if: env.CI == 'true' && env.ACT == 'true'
       env:
-        GH_TOKEN: ${{ secrets.ELEVATED_GITHUB_TOKEN }}
+        GH_TOKEN: "${{ secrets.ELEVATED_GITHUB_TOKEN }}"
       run: |
         run_quiet() { local logfile="${RUNNER_TEMP}/command.log" ; "$@" > "$logfile" 2>&1 || { cat "$logfile" ; exit 1 ; } ; }
 
