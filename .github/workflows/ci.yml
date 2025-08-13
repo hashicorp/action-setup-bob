@@ -18,91 +18,91 @@ jobs:
     strategy:
       matrix:
         tag:
-          - '' # latest release
-          - 'v0.2.0' # not the latest release
+          - "" # latest release
+          - "v0.2.0" # not the latest release
 
     steps:
-    - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
 
-    - name: "Install tools (only for running locally via act)"
-      if: env.CI == 'true' && env.ACT == 'true'
-      env:
-        GH_TOKEN: "${{ secrets.ELEVATED_GITHUB_TOKEN }}"
-      run: |
-        run_quiet() { local logfile="${RUNNER_TEMP}/command.log" ; "$@" > "$logfile" 2>&1 || { cat "$logfile" ; exit 1 ; } ; }
+      - name: "Install tools (only for running locally via act)"
+        if: env.CI == 'true' && env.ACT == 'true'
+        env:
+          GH_TOKEN: "${{ secrets.ELEVATED_GITHUB_TOKEN }}"
+        run: |
+          run_quiet() { local logfile="${RUNNER_TEMP}/command.log" ; "$@" > "$logfile" 2>&1 || { cat "$logfile" ; exit 1 ; } ; }
 
-        type -p curl >/dev/null || (apt update && apt install --yes curl)
-        curl --silent --show-error --fail --location \
-          --output /usr/share/keyrings/githubcli-archive-keyring.gpg \
-          https://cli.github.com/packages/githubcli-archive-keyring.gpg
-        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" > /etc/apt/sources.list.d/github-cli.list
-        run_quiet apt update
-        run_quiet apt install --yes gh
-        gh --version
+          type -p curl >/dev/null || (apt update && apt install --yes curl)
+          curl --silent --show-error --fail --location \
+            --output /usr/share/keyrings/githubcli-archive-keyring.gpg \
+            https://cli.github.com/packages/githubcli-archive-keyring.gpg
+          echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" > /etc/apt/sources.list.d/github-cli.list
+          run_quiet apt update
+          run_quiet apt install --yes gh
+          gh --version
 
-    # Create a marker we can use later to verify no files were added to the working directory.
-    # Extra files make goreleaser anxious.
-    - name: Create Marker File
-      env:
-        CRUFT_MARKER: "${{ runner.temp }}/pre-install-marker"
-      run: touch "${CRUFT_MARKER}"
+      # Create a marker we can use later to verify no files were added to the working directory.
+      # Extra files make goreleaser anxious.
+      - name: Create Marker File
+        env:
+          CRUFT_MARKER: "${{ runner.temp }}/pre-install-marker"
+        run: touch "${CRUFT_MARKER}"
 
-    - name: Install bob
-      uses: ./
-      id: install
-      with:
-        tag: ${{ matrix.tag }}
-        github-token: ${{ secrets.ELEVATED_GITHUB_TOKEN }}
+      - name: Install bob
+        uses: ./
+        id: install
+        with:
+          tag: ${{ matrix.tag }}
+          github-token: ${{ secrets.ELEVATED_GITHUB_TOKEN }}
 
-    # Find anything in the working directory newer than the marker created above
-    - name: Check For New Files
-      env:
-        CRUFT_LOG: "${{ runner.temp }}/bob-installer-cruft.txt"
-        CRUFT_MARKER: "${{ runner.temp }}/pre-install-marker"
-      run: |
-        find "$PWD" -newer "${CRUFT_MARKER}" > "${CRUFT_LOG}"
-        if [ "$(wc -l < "${{ env.CRUFT_LOG }}" | xargs)" -gt 0 ]; then
-          echo "::error::Unexpected changes to working directory (tree):"
-          cat "${CRUFT_LOG}"
-          exit 1
-        fi
-        echo "No unexpected files found."
+      # Find anything in the working directory newer than the marker created above
+      - name: Check For New Files
+        env:
+          CRUFT_LOG: "${{ runner.temp }}/bob-installer-cruft.txt"
+          CRUFT_MARKER: "${{ runner.temp }}/pre-install-marker"
+        run: |
+          find "$PWD" -newer "${CRUFT_MARKER}" > "${CRUFT_LOG}"
+          if [ "$(wc -l < "${{ env.CRUFT_LOG }}" | xargs)" -gt 0 ]; then
+            echo "::error::Unexpected changes to working directory (tree):"
+            cat "${CRUFT_LOG}"
+            exit 1
+          fi
+          echo "No unexpected files found."
 
-    - name: Test reported version
-      env:
-        GH_TOKEN: ${{ secrets.ELEVATED_GITHUB_TOKEN }}
-      run: |
-        got_ver="${{ steps.install.outputs.installed_version }}"
-        if [ -z "$got_ver" ]; then
-          echo "Failed to detect installed version: step output empty." 1>&2
-          exit 1
-        fi
+      - name: Test reported version
+        env:
+          GH_TOKEN: ${{ secrets.ELEVATED_GITHUB_TOKEN }}
+        run: |
+          got_ver="${{ steps.install.outputs.installed_version }}"
+          if [ -z "$got_ver" ]; then
+            echo "Failed to detect installed version: step output empty." 1>&2
+            exit 1
+          fi
 
-        exp_ver="${{ matrix.tag }}"
-        if [ -z "$exp_ver" ]; then # default version, same method used by action.yml
-          echo "Identifying latest release..."
-          exp_ver="$(gh release list --repo=hashicorp/bob | awk '$2 == "Latest" { print $3 }')"
-          echo "  Latest release: $exp_ver"
-        fi
-        if [ -z "$exp_ver" ]; then
-          echo "Failed to determine expected version of hc-releases" 1>&2
-          exit 1
-        fi
+          exp_ver="${{ matrix.tag }}"
+          if [ -z "$exp_ver" ]; then # default version, same method used by action.yml
+            echo "Identifying latest release..."
+            exp_ver="$(gh release list --repo=hashicorp/bob | awk '$2 == "Latest" { print $3 }')"
+            echo "  Latest release: $exp_ver"
+          fi
+          if [ -z "$exp_ver" ]; then
+            echo "Failed to determine expected version of hc-releases" 1>&2
+            exit 1
+          fi
 
-        echo "Found version: $got_ver"
-        echo "Expected version: $exp_ver"
+          echo "Found version: $got_ver"
+          echo "Expected version: $exp_ver"
 
-        # When checking the version, ignore the common `v` prefix in tags.
-        # This test is imperfect but should be good enough.
-        if ! grep -Eq "(^|.*[^[:digit:]])${exp_ver#v}([^[:digit:]]|$)" <<< "$got_ver" ; then
-          echo "Incorrect version found (wrong version installed?  target version not first in PATH?)" 1>&2
-          echo "Failed to find [${exp_ver#v}] within [$got_ver]" 1>&2
-          exit 1
-        fi
+          # When checking the version, ignore the common `v` prefix in tags.
+          # This test is imperfect but should be good enough.
+          if ! grep -Eq "(^|.*[^[:digit:]])${exp_ver#v}([^[:digit:]]|$)" <<< "$got_ver" ; then
+            echo "Incorrect version found (wrong version installed?  target version not first in PATH?)" 1>&2
+            echo "Failed to find [${exp_ver#v}] within [$got_ver]" 1>&2
+            exit 1
+          fi
 
-    # test that a single job can call the action multiple times
-    - name: Install again
-      uses: ./
-      with:
-        tag: ${{ matrix.tag }}
-        github-token: ${{ secrets.ELEVATED_GITHUB_TOKEN }}
+      # test that a single job can call the action multiple times
+      - name: Install again
+        uses: ./
+        with:
+          tag: ${{ matrix.tag }}
+          github-token: ${{ secrets.ELEVATED_GITHUB_TOKEN }}
