@@ -28,7 +28,7 @@ steps:
 ```
 
 ## Inputs
-The actions supports the following inputs:
+This action supports the following inputs:
 
 - `github-token`: The GitHub token secret to use with permissions to download `bob` CLI
 - `tag`: The tag of the release of `bob` to install, defaulting to latest
